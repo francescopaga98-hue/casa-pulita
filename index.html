@@ -1,0 +1,410 @@
+<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Casa Pulita"><meta name="theme-color" content="#EAF1EE"><title>Casa Pulita</title><link rel="manifest" id="mf" href="manifest-Fabio.json"><link rel="apple-touch-icon" href="icona.png"><link rel="icon" type="image/png" href="icona.png">
+<script>(function(){var io=new URLSearchParams(location.search).get("io");if(["Francesco","Fabio","Alessio"].indexOf(io)>=0)document.getElementById("mf").href="manifest-"+io+".json"})()</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: una colonna da telefono, piastrelle di cucina sullo sfondo; su desktop due colonne (turni | spazzatura + attività) */
+:root{
+  --bg:#EAF1EE; --tile:#DCE7E2; --surface:#FFFFFF; --ink:#15302B; --muted:#5A6E68; --line:#D3DFDA;
+  --accent:#F2B705; --accent-ink:#2A2100;
+  --ok:#1E8556; --ok-bg:#DDF3E8; --warn:#B86E00; --warn-bg:#FFF0D6; --bad:#C23A28; --bad-bg:#FDE4DF;
+  --p0:#2F6FD6; --p1:#D4532F; --p2:#7B4FC9;
+  --f-display:"Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --f-body:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --r:14px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E1916; --tile:#132320; --surface:#16261F; --ink:#E5EFEB; --muted:#93A9A2; --line:#24392F;
+  --accent:#F5C232; --accent-ink:#231B00;
+  --ok:#43C98B; --ok-bg:#163A2A; --warn:#F2A83E; --warn-bg:#3A2A10; --bad:#F26C57; --bad-bg:#3D1C17;
+  --p0:#6C9DF0; --p1:#F0835F; --p2:#A88BEA; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E1916; --tile:#132320; --surface:#16261F; --ink:#E5EFEB; --muted:#93A9A2; --line:#24392F;
+  --accent:#F5C232; --accent-ink:#231B00;
+  --ok:#43C98B; --ok-bg:#163A2A; --warn:#F2A83E; --warn-bg:#3A2A10; --bad:#F26C57; --bad-bg:#3D1C17;
+  --p0:#6C9DF0; --p1:#F0835F; --p2:#A88BEA; color-scheme:dark}
+
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.45;
+  background-image:linear-gradient(var(--tile) 1px,transparent 1px),linear-gradient(90deg,var(--tile) 1px,transparent 1px);
+  background-size:28px 28px;}
+.wrap{max-width:1040px;margin:0 auto;padding-block:20px 48px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  display:flex;flex-direction:column;gap:18px}
+h1,h2{font-family:var(--f-display);margin:0;text-wrap:balance;letter-spacing:-.01em}
+h1{font-size:30px;font-weight:800}
+h2{font-size:19px;font-weight:600}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+button{font:inherit;cursor:pointer;border:0;border-radius:10px}
+button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+button:disabled{cursor:default;opacity:.55}
+
+header{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+.who{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);padding:6px 6px 6px 12px;border-radius:999px;font-weight:600}
+.who button{background:var(--bg);color:var(--ink);padding:6px 10px;border-radius:999px;font-size:13px}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block;flex:none}
+
+.alerts{display:flex;flex-direction:column;gap:8px}
+.alert{display:flex;gap:10px;align-items:center;padding:10px 14px;border-radius:12px;font-weight:600;font-size:14px}
+.alert.bad{background:var(--bad-bg);color:var(--bad)}
+.alert.warn{background:var(--warn-bg);color:var(--warn)}
+.alert.ok{background:var(--ok-bg);color:var(--ok)}
+
+.grid{display:grid;grid-template-columns:1fr;gap:18px}
+@media (min-width:860px){.grid{grid-template-columns:1.25fr 1fr;align-items:start}}
+.col{display:flex;flex-direction:column;gap:18px;min-width:0}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.panel-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+
+.cards{display:flex;flex-direction:column;gap:10px}
+.card{border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px;border-left:5px solid var(--pc)}
+.card.me{box-shadow:0 0 0 2px var(--accent) inset}
+.card-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.pname{font-weight:700;font-size:16px;display:flex;align-items:center;gap:8px}
+.task{font-family:var(--f-display);font-weight:600;font-size:20px}
+.items{margin:0;padding-left:18px;color:var(--muted);font-size:14px}
+.meta{font-size:13px;color:var(--muted)}
+.pill{font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;white-space:nowrap}
+.pill.ok{background:var(--ok-bg);color:var(--ok)}
+.pill.warn{background:var(--warn-bg);color:var(--warn)}
+.pill.bad{background:var(--bad-bg);color:var(--bad)}
+.pill.todo{background:var(--bg);color:var(--muted)}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{padding:10px 14px;font-weight:700;font-size:14px}
+.btn.primary{background:var(--accent);color:var(--accent-ink)}
+.btn.ghost{background:var(--bg);color:var(--ink);border:1px solid var(--line)}
+.btn.small{padding:6px 10px;font-size:13px}
+
+.trash-status{display:flex;gap:14px;align-items:center}
+.big{font-family:var(--f-display);font-weight:800;font-size:40px;line-height:1;font-variant-numeric:tabular-nums}
+.bins{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.bin{border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;align-items:flex-start;gap:2px;background:var(--surface);color:var(--ink);text-align:left;transition:transform .1s}
+.bin:hover:not(:disabled){border-color:var(--accent)}
+.bin:active:not(:disabled){transform:scale(.97)}
+.bin em{font-style:normal;font-size:12px;font-weight:700;color:var(--ink);margin-top:6px;background:var(--accent);color:var(--accent-ink);padding:3px 8px;border-radius:999px}
+.bin b{font-size:14px}
+.bin span{font-size:12px;color:var(--muted)}
+.bin.bad{border-color:var(--bad);background:var(--bad-bg)}
+.bin.warn{border-color:var(--warn);background:var(--warn-bg)}
+.turn{display:flex;align-items:center;gap:8px;font-weight:600}
+.picker{display:flex;flex-direction:column;gap:10px;border:1px dashed var(--line);border-radius:12px;padding:12px}
+.checks{display:flex;flex-wrap:wrap;gap:8px}
+.checks label{display:flex;align-items:center;gap:6px;background:var(--bg);border:1px solid var(--line);padding:8px 10px;border-radius:10px;font-weight:600;font-size:14px;cursor:pointer}
+.checks input{width:18px;height:18px;accent-color:var(--accent)}
+
+.rota{width:100%;border-collapse:collapse;font-size:14px}
+.rota-wrap{overflow-x:auto}
+.rota th,.rota td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);white-space:nowrap}
+.rota th{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.rota tr.now td{font-weight:700}
+
+.feed{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.feed li{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
+.feed li:last-child{border-bottom:0}
+.feed .txt{flex:1;min-width:0}
+.feed .when{display:block;font-size:12px;color:var(--muted)}
+.feed .undo{background:none;color:var(--muted);text-decoration:underline;font-size:12px;padding:0}
+.empty{color:var(--muted);font-size:14px;padding:6px 0}
+
+.overlay{position:fixed;inset:0;background:color-mix(in srgb,var(--bg) 80%,transparent);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;z-index:20;
+  padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.sheet{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px;max-width:360px;width:100%;display:flex;flex-direction:column;gap:12px}
+.sheet .btn{display:flex;align-items:center;gap:10px;justify-content:flex-start;font-size:16px;padding:14px}
+
+.toasts{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:8px;z-index:30;width:min(420px,calc(100% - 32px))}
+.toast{background:var(--ink);color:var(--bg);padding:12px 14px;border-radius:12px;font-weight:600;font-size:14px;box-shadow:0 8px 24px rgba(0,0,0,.18);display:flex;gap:10px;align-items:center}
+@media (prefers-reduced-motion:no-preference){.toast{animation:up .25s ease-out}@keyframes up{from{transform:translateY(8px);opacity:.4}}}
+.notice{font-size:13px;color:var(--muted)}
+[hidden]{display:none!important}
+*,*::before,*::after{box-sizing:border-box}
+html{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0}
+.steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:14px}
+code{font-size:14px;font-weight:700;background:var(--bg);border:1px solid var(--line);padding:2px 6px;border-radius:6px;word-break:break-all}
+</style></head><body>
+
+<div class="wrap">
+  <header>
+    <div>
+      <div class="eyebrow" id="weekLabel">Settimana</div>
+      <h1>Casa Pulita</h1>
+    </div>
+    <div class="who" id="whoBox"><span class="dot" id="whoDot"></span><span id="whoName">—</span><button id="changeMe" type="button">Cambia</button></div>
+  </header>
+
+  <div class="alerts" id="alerts"></div>
+
+  <div class="grid">
+    <div class="col">
+      <section class="panel">
+        <div class="panel-head"><h2>Turni di questa settimana</h2><span class="meta" id="deadline"></span></div>
+        <div class="cards" id="cards"></div>
+      </section>
+      <section class="panel">
+        <div class="panel-head"><h2>Prossime settimane</h2><span class="meta">si ruota ogni lunedì</span></div>
+        <div class="rota-wrap"><table class="rota" id="rota"></table></div>
+      </section>
+    </div>
+    <div class="col">
+      <section class="panel" id="trashPanel">
+        <div class="panel-head"><h2>Spazzatura</h2><span class="meta">ogni 3 giorni, massimo 4</span></div>
+        <div class="trash-status"><div class="big" id="trashDays">–</div><div><div id="trashLine" style="font-weight:600">Nessuna uscita registrata</div><span class="pill todo" id="trashPill">—</span></div></div>
+        <div class="turn">Tocca a: <span class="dot" id="turnDot"></span><span id="turnName">—</span></div>
+        <div class="meta">Tocca il sacco che hai appena buttato: si registra subito a tuo nome.</div>
+        <div class="bins" id="bins"></div>
+      </section>
+      <section class="panel">
+        <div class="panel-head"><h2>Attività</h2><span class="meta">chi ha fatto cosa</span></div>
+        <ul class="feed" id="feed"><li class="empty">Qui comparirà chi pulisce e chi butta la spazzatura. Inizia segnando il tuo turno come fatto.</li></ul>
+      </section>
+      <section class="panel" id="pushPanel">
+        <div class="panel-head"><h2>Notifiche sul telefono</h2><span class="pill todo" id="pushPill">spente</span></div>
+        <p class="meta" id="pushText" style="margin:0">Ricevi un avviso quando qualcuno pulisce, butta la spazzatura o è in ritardo.</p>
+        <ol class="steps" id="pushSteps" hidden>
+          <li>Tocca il tasto <b>Condividi</b> in basso in Safari (il quadrato con la freccia).</li>
+          <li>Scegli <b>Aggiungi alla schermata Home</b>, poi <b>Aggiungi</b>.</li>
+          <li>Chiudi Safari e apri <b>Casa Pulita</b> dall'icona nuova: qui comparirà il tasto per attivare le notifiche.</li>
+        </ol>
+        <div class="actions"><button class="btn primary" id="pushBtn" type="button" hidden>Attiva notifiche</button></div>
+      </section>
+      <p class="notice" id="dbNotice" hidden>Non riesco a collegarmi. Riprovo da solo tra pochi secondi.</p>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay" hidden>
+  <div class="sheet">
+    <h2>Chi sei?</h2>
+    <p class="meta" style="margin:0">Serve per sapere di chi è il turno quando premi i pulsanti. Lo ricorda solo questo telefono.</p>
+    <div id="meChoices" style="display:flex;flex-direction:column;gap:8px"></div>
+  </div>
+</div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<script>
+const PEOPLE=["Francesco","Fabio","Alessio"];
+const PCOL=["var(--p0)","var(--p1)","var(--p2)"];
+// ordine di rotazione: cucina → bagno → corridoio
+const TASKS=[
+  {id:"cucina",name:"Cucina",items:["Piano cottura","Sala da pranzo (tavolo e superfici)"]},
+  {id:"bagno",name:"Bagno",items:["Lavandini, WC e bidet","Specchio e vasca"]},
+  {id:"corridoio",name:"Corridoio, pavimenti e vetri",items:["Libreria (togliere la polvere)","Pavimento di tutta la casa","Vetri della porta-finestra in cucina"]}
+];
+const BINS=[{id:"organico",name:"Organico"},{id:"carta",name:"Carta"},{id:"plastica",name:"Plastica"},{id:"indiff",name:"Indifferenziata"}];
+const DAY=86400000;
+const ANCHOR=new Date(2026,9,19); // lunedì 19 ottobre 2026: Francesco cucina, Fabio bagno, Alessio corridoio
+
+const $=id=>document.getElementById(id);
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+const API="https://mercalli-n8n.duckdns.org/webhook/", TOPIC="casapulita-fp-q7m4x2kz";
+const LINK_ME=new URLSearchParams(location.search).get("io");
+let me=PEOPLE.includes(LINK_ME)?LINK_ME:(PEOPLE.includes(store.get("casa_me"))?store.get("casa_me"):null);
+let logs=[]; let db=true; let firstLoad=true;
+
+function monday(d){const x=new Date(d.getFullYear(),d.getMonth(),d.getDate());const wd=(x.getDay()+6)%7;x.setDate(x.getDate()-wd);return x}
+function weekIdx(d){return Math.round((monday(d)-ANCHOR)/(7*DAY))}
+function taskFor(p,w){return TASKS[((p+w)%3+3)%3]}
+function daysBetween(a,b){const A=new Date(a);A.setHours(0,0,0,0);const B=new Date(b);B.setHours(0,0,0,0);return Math.round((B-A)/DAY)}
+const fmtD=d=>d.toLocaleDateString("it-IT",{day:"numeric",month:"short"});
+function rel(ts){const d=daysBetween(ts,Date.now());const t=new Date(ts).toLocaleTimeString("it-IT",{hour:"2-digit",minute:"2-digit"});
+  if(d===0)return "oggi alle "+t; if(d===1)return "ieri alle "+t; return d+" giorni fa";}
+function ago(n){return n===0?"oggi":n===1?"ieri":n+" giorni fa"}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+
+function toast(msg){const t=document.createElement("div");t.className="toast";t.textContent=msg;$("toasts").appendChild(t);setTimeout(()=>t.remove(),5000)}
+
+function render(){
+  const now=new Date(); const w=weekIdx(now); const mon=monday(now); const sun=new Date(mon.getTime()+6*DAY);
+  const dow=(now.getDay()+6)%7; // 0 lun … 6 dom
+  $("weekLabel").textContent="Settimana "+fmtD(mon)+" – "+fmtD(sun);
+  const left=6-dow; $("deadline").textContent=left===0?"scade oggi":"scade domenica · "+left+(left===1?" giorno":" giorni");
+  // chi sono
+  if(me){const i=PEOPLE.indexOf(me);$("whoDot").style.background=PCOL[i];$("whoName").textContent=me}
+  else {$("whoName").textContent="Scegli chi sei";$("whoDot").style.background="var(--line)"}
+
+  const tasks=logs.filter(l=>l.kind==="task");
+  const alerts=[];
+  // card turni
+  const cards=$("cards"); cards.innerHTML="";
+  PEOPLE.forEach((p,i)=>{
+    const t=taskFor(i,w);
+    const done=tasks.find(l=>l.person===p&&l.week===w);
+    const last=tasks.filter(l=>l.person===p).sort((a,b)=>b.at-a.at)[0];
+    const lastPrev=tasks.find(l=>l.person===p&&l.week===w-1);
+    let pill,cls;
+    if(done){pill="Fatto ✓";cls="ok"}
+    else if(dow>=5){pill="Scade a breve";cls="bad"}
+    else if(dow>=3){pill="Da fare";cls="warn"}
+    else {pill="Da fare";cls="todo"}
+    const sinceTxt=last?"Ultima pulizia: "+ago(daysBetween(last.at,now)):"Nessuna pulizia registrata";
+    if(!done&&dow>=4) alerts.push({cls:dow>=5?"bad":"warn",txt:p+" non ha ancora fatto: "+t.name+(left===0?" (scade oggi)":" (mancano "+left+(left===1?" giorno)":" giorni)"))});
+    if(!lastPrev&&w>0&&logs.length) alerts.push({cls:"warn",txt:p+" ha saltato il turno della settimana scorsa ("+taskFor(i,w-1).name+")"});
+    const c=document.createElement("div"); c.className="card"+(p===me?" me":""); c.style.setProperty("--pc",PCOL[i]);
+    c.innerHTML=`<div class="card-top"><div class="pname"><span class="dot" style="background:${PCOL[i]}"></span>${p}${p===me?' <span class="meta">(tu)</span>':""}</div><span class="pill ${cls}">${pill}</span></div>
+      <div class="task">${t.name}</div>
+      <ul class="items">${t.items.map(x=>"<li>"+x+"</li>").join("")}</ul>
+      <div class="meta">${sinceTxt}${done?" · segnato "+rel(done.at):""}</div>
+      <div class="actions"></div>`;
+    const act=c.querySelector(".actions");
+    if(!done){
+      const b=document.createElement("button");b.className="btn primary";b.type="button";b.textContent=p===me?"Ho finito ✓":"Segna fatto per "+p;
+      b.onclick=()=>addLog({kind:"task",person:p,task:t.id,week:w});act.appendChild(b);
+      if(me&&p!==me){const n=document.createElement("button");n.className="btn ghost";n.type="button";n.textContent="Sollecita 👋";
+        n.onclick=()=>addLog({kind:"nudge",to:p,task:t.id});act.appendChild(n)}
+    }
+    cards.appendChild(c);
+  });
+
+  // spazzatura
+  const trash=logs.filter(l=>l.kind==="trash").sort((a,b)=>b.at-a.at);
+  const lastT=trash[0];
+  const nextIdx=lastT?(PEOPLE.indexOf(lastT.person)+1)%3:0;
+  $("turnName").textContent=PEOPLE[nextIdx]+(PEOPLE[nextIdx]===me?" (tu)":"");$("turnDot").style.background=PCOL[nextIdx];
+  if(lastT){
+    const d=daysBetween(lastT.at,now);
+    $("trashDays").textContent=d+"g";
+    $("trashLine").textContent="Ultima volta: "+ago(d)+" ("+lastT.person+")";
+    const p=$("trashPill");
+    if(d>=4){p.className="pill bad";p.textContent="In ritardo";alerts.unshift({cls:"bad",txt:"Spazzatura ferma da "+d+" giorni: tocca a "+PEOPLE[nextIdx]})}
+    else if(d===3){p.className="pill warn";p.textContent="Da buttare oggi";alerts.push({cls:"warn",txt:"Oggi va buttata la spazzatura: tocca a "+PEOPLE[nextIdx]})}
+    else {p.className="pill ok";p.textContent="Tutto a posto"}
+  } else {$("trashDays").textContent="–";$("trashLine").textContent="Nessuna uscita registrata";$("trashPill").className="pill todo";$("trashPill").textContent="Inizia tu";}
+  const bins=$("bins"); bins.innerHTML="";
+  BINS.forEach(b=>{const l=trash.find(x=>(x.bins||[]).includes(b.id));const d=l?daysBetween(l.at,now):null;
+    const el=document.createElement("button");el.type="button";el.id="bin-"+b.id;el.className="bin"+(d===null?"":d>=4?" bad":d===3?" warn":"");
+    el.innerHTML=`<b>${b.name}</b><span>${l?ago(d)+" · "+esc(l.person):"mai registrata"}</span><em>L'ho buttata io</em>`;
+    el.disabled=!db; el.onclick=()=>throwBin(b); bins.appendChild(el)});
+
+  // rotazione prossime settimane
+  let rows=`<tr><th>Settimana</th>${PEOPLE.map(p=>"<th>"+p+"</th>").join("")}</tr>`;
+  for(let k=0;k<4;k++){const m=new Date(mon.getTime()+k*7*DAY);rows+=`<tr class="${k===0?"now":""}"><td>${k===0?"Questa":fmtD(m)}</td>${PEOPLE.map((p,i)=>"<td>"+taskFor(i,w+k).name+"</td>").join("")}</tr>`}
+  $("rota").innerHTML=rows;
+
+  // avvisi
+  const nudgesForMe=me?logs.filter(l=>l.kind==="nudge"&&l.to===me&&l.at>=mon.getTime()&&!tasks.find(t=>t.person===me&&t.week===w)):[];
+  if(nudgesForMe.length) alerts.unshift({cls:"warn",txt:[...new Set(nudgesForMe.map(n=>n.by))].join(" e ")+" ti ha sollecitato per "+taskFor(PEOPLE.indexOf(me),w).name});
+  const al=$("alerts"); al.innerHTML="";
+  if(!alerts.length&&logs.length) alerts.push({cls:"ok",txt:"Tutto in regola per ora."});
+  alerts.slice(0,5).forEach(a=>{const d=document.createElement("div");d.className="alert "+a.cls;d.textContent=a.txt;al.appendChild(d)});
+
+  // attività
+  const feed=$("feed");
+  if(!logs.length){feed.innerHTML='<li class="empty">Qui comparirà chi pulisce e chi butta la spazzatura. Inizia segnando il tuo turno come fatto.</li>'}
+  else{feed.innerHTML="";
+    logs.slice().sort((a,b)=>b.at-a.at).slice(0,30).forEach(l=>{
+      const li=document.createElement("li");const pi=PEOPLE.indexOf(l.kind==="nudge"?l.by:l.person);
+      let txt="";
+      if(l.kind==="task") txt=`<b>${esc(l.person)}</b> ha pulito: ${esc((TASKS.find(t=>t.id===l.task)||{}).name||l.task)}`+(l.by&&l.by!==l.person?` <span class="meta">(segnato da ${esc(l.by)})</span>`:"");
+      else if(l.kind==="trash") txt=`<b>${esc(l.person)}</b> ha buttato ${(l.bins||[]).map(b=>(BINS.find(x=>x.id===b)||{}).name||b).join(", ").toLowerCase()}`;
+      else txt=`<b>${esc(l.by)}</b> ha sollecitato ${esc(l.to)} 👋`;
+      li.innerHTML=`<span class="dot" style="margin-top:6px;background:${PCOL[pi]||"var(--line)"}"></span><div class="txt">${txt}<span class="when">${rel(l.at)}</span></div>`;
+      if(me&&l.by===me&&Date.now()-l.at<DAY&&db){const u=document.createElement("button");u.className="undo";u.type="button";u.textContent="Annulla";
+        u.onclick=()=>fetch(API+"casa-annulla",{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify({id:l.id,by:me})}).then(r=>{if(!r.ok)throw 0;return load()}).catch(()=>toast("Non sono riuscito ad annullare, riprova"));li.appendChild(u)}
+      feed.appendChild(li)})}
+
+  document.querySelectorAll(".card .btn").forEach(b=>b.disabled=!db);
+}
+
+async function addLog(entry,msg){
+  if(!me){openMe();return}
+  if(!db){toast("Salvataggio non disponibile qui");return}
+  try{const r=await fetch(API+"casa-registra",{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify({...entry,by:me})});if(!r.ok)throw new Error("http");await load();
+    toast(msg||(entry.kind==="nudge"?"Sollecito inviato a "+entry.to:"Segnato come fatto ✓"))}
+  catch(e){toast("Non salvato: controlla la connessione e riprova")}
+}
+
+// spazzatura: un tocco = registrato
+async function throwBin(b){
+  if(!me){openMe();return}
+  const dup=logs.find(l=>l.kind==="trash"&&l.person===me&&(l.bins||[]).includes(b.id)&&Date.now()-l.at<10*60000);
+  if(dup){toast(b.name+" già registrato poco fa");return}
+  await addLog({kind:"trash",person:me,bins:[b.id]},b.name+" registrato a nome di "+me+" ✓");
+}
+
+// chi sono
+function openMe(){$("meChoices").innerHTML="";PEOPLE.forEach((p,i)=>{const b=document.createElement("button");b.className="btn ghost";b.type="button";
+  b.innerHTML=`<span class="dot" style="background:${PCOL[i]}"></span>${p}`;b.onclick=()=>{me=p;store.set("casa_me",p);$("overlay").hidden=true;render();if(typeof initPush==="function")initPush()};$("meChoices").appendChild(b)});
+  $("overlay").hidden=false}
+$("changeMe").onclick=openMe;
+if(PEOPLE.includes(LINK_ME)) $("changeMe").hidden=true;
+else if(!me) openMe();
+
+// novità dall'ultima visita
+function announceNew(){
+  const seen=Number(store.get("casa_seen")||0);
+  if(seen){
+    const fresh=logs.filter(l=>l.at>seen&&l.by!==me).sort((a,b)=>a.at-b.at).slice(-4);
+    fresh.forEach(l=>{
+      if(l.kind==="nudge") toast(l.to===me?l.by+" ti ha sollecitato 👋":l.by+" ha sollecitato "+l.to);
+      else if(l.kind==="trash") toast(l.person+" ha buttato la spazzatura");
+      else toast(l.person+" ha finito: "+((TASKS.find(t=>t.id===l.task)||{}).name||""));
+    });
+  }
+  store.set("casa_seen",String(Date.now()));
+}
+
+render();
+setInterval(render,60000);
+
+function say(l){
+  if(l.kind==="nudge") toast(l.to===me?l.by+" ti ha sollecitato 👋":l.by+" ha sollecitato "+l.to);
+  else if(l.kind==="trash") toast(l.person+" ha buttato "+(l.bins||[]).map(b=>(BINS.find(x=>x.id===b)||{}).name||b).join(", ").toLowerCase());
+  else toast(l.person+" ha finito il suo turno");
+}
+async function load(){
+  try{
+    const r=await fetch(API+"casa-stato",{cache:"no-store"}); if(!r.ok) throw new Error("http");
+    const j=await r.json(); const next=Array.isArray(j.logs)?j.logs:[];
+    if(!firstLoad){const before=new Set(logs.map(l=>l.id));next.filter(l=>!before.has(l.id)&&l.by!==me).forEach(say)}
+    logs=next; firstLoad=false; db=true; $("dbNotice").hidden=true;
+  }catch(e){ if(firstLoad) db=false; $("dbNotice").hidden=false; }
+  render();
+}
+const VAPID="BNUp1xp6UPUmXolPBpRzxIEOaMEOUjcswowyX0TC1d4AhZ1YXdDjl2zCPBcggnRSKPiNACSWbswJYZONQbi-qoc";
+const isIOS=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+const standalone=window.navigator.standalone===true||matchMedia("(display-mode: standalone)").matches;
+const pushOK="serviceWorker" in navigator&&"PushManager" in window&&"Notification" in window;
+let swReg=null;
+function pushUI(state,text){
+  const pill=$("pushPill"),btn=$("pushBtn");
+  $("pushSteps").hidden=state!=="home"; btn.hidden=!(state==="off"||state==="error");
+  if(state==="on"){pill.className="pill ok";pill.textContent="attive";$("pushText").textContent=text||"Su questo telefono le notifiche sono attive."}
+  else if(state==="home"){pill.className="pill warn";pill.textContent="un passo";$("pushText").textContent="Su iPhone le notifiche funzionano solo dall'icona sulla schermata Home:"}
+  else if(state==="denied"){pill.className="pill bad";pill.textContent="bloccate";$("pushText").textContent="Le hai bloccate. Vai in Impostazioni → Notifiche → Casa Pulita e attivale."}
+  else if(state==="nosupport"){pill.className="pill bad";pill.textContent="non disponibili";$("pushText").textContent="Questo telefono non le supporta. Su iPhone serve iOS 16.4 o più recente."}
+  else if(state==="error"){pill.className="pill bad";pill.textContent="errore";$("pushText").textContent=text||"Non sono riuscito ad attivarle. Riprova.";btn.textContent="Riprova"}
+  else {pill.className="pill todo";pill.textContent="spente";$("pushText").textContent=me?"Tocca il tasto e poi Consenti.":"Prima scegli chi sei in alto."}
+}
+async function sendSub(sub){
+  const r=await fetch(API+"casa-iscrivi",{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify({person:me,sub:sub.toJSON()})});
+  if(!r.ok) throw new Error("iscrizione");
+  return r.json().catch(()=>({}));
+}
+async function initPush(){
+  if(isIOS&&!standalone){pushUI("home");return}
+  if(!pushOK){pushUI("nosupport");return}
+  try{swReg=await navigator.serviceWorker.register("sw.js",{scope:"./"})}catch(e){pushUI("error","Non riesco a preparare le notifiche su questo telefono.");return}
+  if(Notification.permission==="denied"){pushUI("denied");return}
+  try{
+    const sub=await swReg.pushManager.getSubscription();
+    if(sub&&Notification.permission==="granted"&&me){pushUI("on");sendSub(sub).catch(()=>{});return}
+  }catch(e){}
+  pushUI("off");
+}
+$("pushBtn").onclick=async()=>{
+  if(!me){openMe();return}
+  try{
+    const perm=await Notification.requestPermission();
+    if(perm!=="granted"){pushUI(perm==="denied"?"denied":"off");return}
+    if(!swReg) swReg=await navigator.serviceWorker.register("sw.js",{scope:"./"});
+    await navigator.serviceWorker.ready;
+    const key=Uint8Array.from(atob(VAPID.replace(/-/g,"+").replace(/_/g,"/")+"=".repeat((4-VAPID.length%4)%4)),c=>c.charCodeAt(0));
+    const sub=(await swReg.pushManager.getSubscription())||await swReg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:key});
+    const res=await sendSub(sub);
+    pushUI("on",res&&res.ok?"Attive. Ti ho appena mandato una notifica di prova.":"Attive su questo telefono.");
+  }catch(e){pushUI("error")}
+};
+initPush();
+load(); setInterval(load,20000);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)load()});
+</script>
+</body></html>
